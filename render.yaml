@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: rguhs-result-helper
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT --timeout-keep-alive 300
+    healthCheckPath: /health

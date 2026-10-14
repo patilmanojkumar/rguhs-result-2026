@@ -1,0 +1,832 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#337ab7">
+  <title>RGUHS - Exam Result Portal</title>
+  <style>
+    :root {
+      --primary-blue: #337ab7;
+      --primary-dark: #245a8a;
+      --panel-border: #337ab7;
+      --table-header-bg: #507CD1;
+      --row-alt: #EFF3FB;
+      --border-gray: #ddd;
+      --text-dark: #333333;
+      --nic-blue: #052B5A;
+      --footer-bg: #e8eff2;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background-color: #f5f8fa;
+      color: var(--text-dark);
+      font-family: Verdana, Arial, Helvetica, sans-serif;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .main-container {
+      width: 96%;
+      max-width: 1060px;
+      margin: 25px auto 40px;
+    }
+
+    /* Outer University Panel */
+    .panel {
+      background: #ffffff;
+      border: 1px solid var(--panel-border);
+      border-radius: 4px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .panel-heading {
+      background: linear-gradient(180deg, #337ab7 0%, #255d8f 100%);
+      color: #ffffff;
+      padding: 14px 18px;
+    }
+    .panes-container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .logo-img {
+      height: 72px;
+      width: auto;
+      filter: drop-shadow(0 1px 3px rgba(0,0,0,0.25));
+    }
+    .university-header {
+      flex: 1;
+      text-align: center;
+    }
+    .univ-name-kn {
+      font-size: 14px;
+      font-weight: 500;
+      color: #f1f7ff;
+      margin-bottom: 2px;
+      letter-spacing: 0.2px;
+    }
+    .univ-name-en {
+      font-size: 20px;
+      font-weight: bold;
+      color: #ffffff;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+      letter-spacing: 0.3px;
+    }
+    .univ-sub {
+      font-size: 12px;
+      color: #d8e8fc;
+      margin-top: 3px;
+    }
+
+    .panel-body {
+      padding: 22px;
+    }
+
+    /* Sub-panel for Exam Result */
+    .sub-panel {
+      border: 1px solid #bce8f1;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      background: #ffffff;
+    }
+    .sub-panel-heading {
+      background: #337ab7;
+      color: #ffffff;
+      padding: 9px 15px;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+
+    /* Form styling */
+    .form-box {
+      background: #fbfcfd;
+      border: 1px solid #e1e7ec;
+      border-radius: 6px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .form-badge {
+      display: inline-block;
+      background: #eef5fc;
+      color: #1a5695;
+      border: 1px solid #bad6f5;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 4px 10px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .form-group {
+      margin-bottom: 12px;
+    }
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      font-size: 12px;
+      color: #2b3b4f;
+      margin-bottom: 6px;
+    }
+    .form-control {
+      width: 100%;
+      padding: 9px 12px;
+      font-family: inherit;
+      font-size: 13px;
+      border: 1px solid #cccccc;
+      border-radius: 4px;
+      background: #ffffff;
+      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+    .form-control:focus {
+      border-color: #66afe9;
+      outline: 0;
+      box-shadow: 0 0 8px rgba(102, 175, 233, 0.4);
+    }
+    .form-control[readonly], .form-control:disabled {
+      background-color: #f1f5f9;
+      color: #475569;
+      cursor: not-allowed;
+    }
+    .consent-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      margin: 14px 0 16px;
+      font-size: 12px;
+      color: #475569;
+    }
+    .consent-wrap input {
+      margin-top: 2px;
+      cursor: pointer;
+    }
+
+    /* Buttons */
+    .btn-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: bold;
+      padding: 9px 24px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary {
+      background-color: #337ab7;
+      border-color: #2e6da4;
+      color: #ffffff;
+    }
+    .btn-primary:hover:not(:disabled) {
+      background-color: #286090;
+      border-color: #204d74;
+    }
+    .btn-primary:disabled {
+      background-color: #337ab7;
+      opacity: 0.82;
+      cursor: wait;
+    }
+    .btn-success {
+      background-color: #5cb85c;
+      border-color: #4cae4c;
+      color: #ffffff;
+    }
+    .btn-success:hover {
+      background-color: #449d44;
+      border-color: #398439;
+    }
+    .btn-sub-hint {
+      font-size: 11.5px;
+      color: #6b7280;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Patience Notification Box */
+    .patience-card {
+      display: none;
+      background: #edf5fc;
+      border: 1px solid #bce8f1;
+      border-radius: 4px;
+      padding: 15px 18px;
+      margin-top: 16px;
+      animation: fadeIn 0.25s ease-in;
+    }
+    .patience-card.show { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+    .patience-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+      color: #174b78;
+      font-size: 13px;
+    }
+    .patience-timer {
+      font-family: monospace;
+      font-size: 13px;
+      background: #ffffff;
+      border: 1px solid #bcdbf3;
+      padding: 2px 9px;
+      border-radius: 3px;
+      color: #0b497e;
+    }
+    .patience-progress-track {
+      width: 100%;
+      height: 6px;
+      background: #d6e8f7;
+      border-radius: 3px;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+    .patience-progress-bar {
+      height: 100%;
+      width: 15%;
+      background: #337ab7;
+      transition: width 0.4s ease;
+      animation: progress-pulse 1.8s infinite ease-in-out;
+    }
+    @keyframes progress-pulse { 0%, 100% { opacity: 0.85; } 50% { opacity: 1; } }
+    .patience-step-text {
+      font-size: 12px;
+      color: #1c4b75;
+      margin: 5px 0 8px;
+      font-weight: 600;
+    }
+    .patience-notice {
+      font-size: 11.5px;
+      color: #4b647c;
+      background: #ffffff;
+      border: 1px solid #d0e4f5;
+      border-radius: 3px;
+      padding: 8px 12px;
+      line-height: 1.45;
+    }
+
+    /* Error and Info Messages */
+    .alert {
+      display: none;
+      padding: 12px 15px;
+      margin-top: 15px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      font-size: 12.5px;
+    }
+    .alert.show { display: block; }
+    .alert-danger {
+      color: #a94442;
+      background-color: #f2dede;
+      border-color: #ebccd1;
+    }
+
+    /* Statement of Marks Styling (mimicking RGUHS ASP.NET Output) */
+    .statement-title {
+      text-align: center;
+      font-size: 15px;
+      font-weight: bold;
+      color: #333333;
+      margin: 12px 0 6px;
+      letter-spacing: 0.5px;
+    }
+    .semester-title {
+      text-align: center;
+      font-size: 13.5px;
+      font-weight: bold;
+      color: #052B5A;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+    .student-details-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+      font-size: 12px;
+    }
+    .student-details-table td {
+      padding: 6px 10px;
+      vertical-align: top;
+    }
+    .field-label {
+      font-weight: bold;
+      color: #333333;
+      width: 20%;
+    }
+    .field-val {
+      color: #111111;
+      width: 30%;
+    }
+
+    /* Marks Table matching #507CD1 exactly */
+    .table-responsive {
+      overflow-x: auto;
+      margin-bottom: 16px;
+    }
+    .table-rguhs {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11.5px;
+      color: #333333;
+      border: 1px solid #dddddd;
+    }
+    .table-rguhs th {
+      background-color: var(--table-header-bg);
+      color: #ffffff;
+      font-weight: bold;
+      padding: 7px 8px;
+      border: 1px solid #3c6ab8;
+      text-align: left;
+      white-space: nowrap;
+    }
+    .table-rguhs td {
+      padding: 7px 8px;
+      border: 1px solid #dddddd;
+      white-space: nowrap;
+    }
+    .table-rguhs tr:nth-child(even) {
+      background-color: var(--row-alt);
+    }
+    .table-rguhs tr:nth-child(odd) {
+      background-color: #ffffff;
+    }
+    .mark-pass {
+      color: green;
+      font-weight: bold;
+    }
+    .mark-fail {
+      color: red;
+      font-weight: bold;
+    }
+
+    /* Summary Table */
+    .table-summary {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      border: 1px solid #dddddd;
+      margin-top: 10px;
+    }
+    .table-summary td {
+      border: 1px solid #dddddd;
+      padding: 7px 10px;
+    }
+    .table-summary .summary-lbl {
+      background-color: #f9f9f9;
+      font-weight: bold;
+      width: 25%;
+    }
+
+    /* Print action container */
+    .print-bar {
+      margin-top: 18px;
+      text-align: center;
+      padding: 10px 0;
+    }
+    .print-date-text {
+      text-align: center;
+      font-weight: bold;
+      font-size: 11.5px;
+      color: #555555;
+      margin-top: 8px;
+    }
+
+    /* Footers */
+    .panel-footer {
+      padding: 12px 18px;
+      font-size: 11px;
+      color: #555555;
+      border-top: 1px solid #e1e7ec;
+      background-color: #fcfdfe;
+      line-height: 1.45;
+    }
+    .panel-footer-nic {
+      background-color: var(--footer-bg);
+      padding: 10px 18px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--nic-blue);
+      border-top: 1px solid #d4e0e6;
+    }
+    .panel-footer-nic a {
+      color: var(--nic-blue);
+      text-decoration: underline;
+    }
+
+    @media print {
+      body { background: #fff; font-size: 11pt; }
+      .main-container { width: 100%; margin: 0; }
+      .form-box, .btn-container, .print-bar, .patience-card { display: none !important; }
+      .panel { border: none; box-shadow: none; }
+      .table-rguhs th { background-color: #507CD1 !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .table-rguhs tr:nth-child(even) { background-color: #EFF3FB !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+    @media (max-width: 650px) {
+      .panes-container { flex-direction: column; text-align: center; }
+      .univ-name-en { font-size: 17px; }
+      .student-details-table td { display: block; width: 100%; padding: 4px 6px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="main-container">
+  <div class="panel">
+    <!-- University Banner Header -->
+    <div class="panel-heading">
+      <div class="panes-container">
+        <div class="left-pane">
+          <img id="img-logo" class="logo-img" src="/static/logo.png" alt="RGUHS Crest" />
+        </div>
+        <div class="university-header">
+          <div class="univ-name-kn">ರಾಜೀವ್ ಗಾಂಧಿ ಆರೋಗ್ಯ ವಿಜ್ಞಾನಗಳ ವಿಶ್ವವಿದ್ಯಾಲಯ, ಕರ್ನಾಟಕ</div>
+          <div class="univ-name-en">Rajiv Gandhi University of Health Sciences, Karnataka</div>
+          <div class="univ-sub">4th 'T' Block, Jayanagar, Bengaluru - 560 041</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-body">
+      <!-- Input Selection Form Panel -->
+      <div class="form-box">
+        <div class="form-badge">📌 EXAMINATION RESULTS PORTAL &bull; PHASE - I MBBS (RS7)</div>
+
+        <form id="lookup-form" autocomplete="off">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="ddlExam">Examination :</label>
+              <select id="ddlExam" class="form-control" disabled>
+                <option value="MBBS7A" selected>MBBS7A - PHASE - I MBBS (RS7)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="reg">Registration Number :</label>
+              <input
+                id="reg"
+                name="registration_number"
+                type="text"
+                class="form-control"
+                maxlength="20"
+                autocomplete="off"
+                spellcheck="false"
+                placeholder="Enter Registration Number"
+                required
+                pattern="[A-Za-z0-9]{4,20}"
+              />
+            </div>
+          </div>
+
+          <div class="consent-wrap">
+            <input id="consent" type="checkbox" required />
+            <label for="consent">I confirm that I am checking my own examination result or have the student's explicit permission to view it.</label>
+          </div>
+
+          <div class="btn-container">
+            <button id="submit" type="submit" class="btn btn-primary">
+              <span id="btn-spinner" class="spinner" style="display:none"></span>
+              <span id="btn-text">View Result</span>
+            </button>
+            <span class="btn-sub-hint">⏱️ Server takes 30–90 seconds. Please be patient after clicking.</span>
+          </div>
+
+          <!-- Patience Live Status Card -->
+          <div id="patience-card" class="patience-card" role="status" aria-live="polite">
+            <div class="patience-header-row">
+              <div>
+                <span class="spinner" style="border-color:rgba(51,122,183,0.3);border-top-color:#337ab7;margin-right:6px"></span>
+                <span>Connecting to RGUHS Examination Portal…</span>
+              </div>
+              <span id="patience-timer" class="patience-timer">00:00</span>
+            </div>
+            <div class="patience-progress-track">
+              <div id="patience-progress-bar" class="patience-progress-bar"></div>
+            </div>
+            <div id="patience-step" class="patience-step-text">Establishing connection with the university portal…</div>
+            <div class="patience-notice">
+              ⏳ <strong>Please be patient:</strong> The official RGUHS database server typically responds in <strong>30 to 90 seconds</strong> (or longer during peak result traffic). <strong>Please do not refresh or close this tab</strong> while your marksheet is being retrieved.
+            </div>
+          </div>
+
+          <div id="message" class="alert alert-danger" role="alert"></div>
+        </form>
+      </div>
+
+      <!-- Result Card (Statement of Marks) -->
+      <div id="result-panel" class="sub-panel" style="display:none">
+        <div class="sub-panel-heading">
+          Exam Result
+        </div>
+        <div class="panel-body" style="padding:18px;">
+          <div class="statement-title">STATEMENT OF MARKS</div>
+          <div class="semester-title" id="lblSemester">PHASE - I MBBS (RS7) EXAMINATION</div>
+
+          <!-- Student Information 2-col Table -->
+          <table class="student-details-table">
+            <tr>
+              <td class="field-label">Student's Name :</td>
+              <td class="field-val"><strong id="lblStudentName">—</strong></td>
+              <td class="field-label">Register Number :</td>
+              <td class="field-val"><strong id="lblRegisNo">—</strong></td>
+            </tr>
+            <tr>
+              <td class="field-label">Mother's Name :</td>
+              <td class="field-val" id="lblMother">—</td>
+              <td class="field-label">Father's Name :</td>
+              <td class="field-val" id="lblFather">—</td>
+            </tr>
+          </table>
+
+          <!-- Marks Table -->
+          <div class="table-responsive">
+            <table class="table-rguhs" id="marksTable">
+              <thead>
+                <tr>
+                  <th>Paper Code</th>
+                  <th>Paper Title</th>
+                  <th>TP1 Max</th>
+                  <th>Theory Paper1</th>
+                  <th>TP2 Max</th>
+                  <th>Theory Paper2</th>
+                  <th>PPR Max</th>
+                  <th>Pract</th>
+                  <th>Pr.Viva Max</th>
+                  <th>Pract Viva</th>
+                  <th>Total Max</th>
+                  <th>Total Obt</th>
+                  <th>TIA Max</th>
+                  <th>Theory IA</th>
+                  <th>PIA Max</th>
+                  <th>Pract IA</th>
+                  <th>Result</th>
+                </tr>
+              </thead>
+              <tbody id="marksBody">
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Summary Table -->
+          <table class="table-summary">
+            <tr>
+              <td class="summary-lbl">Maximum Marks:</td>
+              <td id="lblMaxMarks" style="width:25%">—</td>
+              <td class="summary-lbl">Grand Total (in figures):</td>
+              <td id="lblSecMArks" style="width:25%;font-weight:bold;">—</td>
+            </tr>
+            <tr>
+              <td class="summary-lbl">Grand Total (in words):</td>
+              <td colspan="3" id="lblMarksofword" style="font-weight:bold;">—</td>
+            </tr>
+            <tr>
+              <td class="summary-lbl">Result:</td>
+              <td colspan="3"><span id="lblResult" style="font-weight:bold;font-size:13px;">—</span></td>
+            </tr>
+            <tr>
+              <td class="summary-lbl">College Code & Name:</td>
+              <td colspan="3" id="lblcollegeName">—</td>
+            </tr>
+            <tr>
+              <td class="summary-lbl">Minimum To Pass:</td>
+              <td colspan="3" id="lblMin" style="font-size:11px;color:#555;">40%-THEORY , 40%-PRACTICAL, 50%-THEORY + PRACTICAL AGGREGATE, 40%-IA, 40%-PIA, 50%-IN INTERNAL ASSESSMENT</td>
+            </tr>
+            <tr>
+              <td class="summary-lbl">Result Published Date:</td>
+              <td colspan="3" id="lblresultpublishdate">—</td>
+            </tr>
+          </table>
+
+          <!-- Print Button & Printed Date -->
+          <div class="print-bar">
+            <button type="button" class="btn btn-success" onclick="window.print()" id="btn_print">
+              🖨️ Print Marksheet
+            </button>
+            <div id="lblprintdate" class="print-date-text"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Official University Footers -->
+    <div class="panel-footer">
+      <strong>Note:-</strong> Rajiv Gandhi University is not responsible for any inadvertent error that may have crept in the result being published on NET. The results published on net are for immediate information to the examinees. These cannot be treated as original mark sheets.
+    </div>
+
+    <div class="panel-footer-nic">
+      <span>Designed and Developed with the technical support of</span>
+      <a href="http://www.kar.nic.in/" target="_blank" rel="noopener noreferrer">National Informatics Centre</a>,
+      <span>Karnataka State Unit, Bangalore.</span>
+      <span style="margin-left:12px;color:#333;">Version - 1.0.0.18</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const form = document.getElementById('lookup-form');
+const submit = document.getElementById('submit');
+const btnSpinner = document.getElementById('btn-spinner');
+const btnText = document.getElementById('btn-text');
+const patienceCard = document.getElementById('patience-card');
+const patienceTimer = document.getElementById('patience-timer');
+const patienceBar = document.getElementById('patience-progress-bar');
+const patienceStep = document.getElementById('patience-step');
+const messageBox = document.getElementById('message');
+const resultPanel = document.getElementById('result-panel');
+
+let timerInterval = null;
+let elapsedSeconds = 0;
+
+function startPatienceTracker() {
+  elapsedSeconds = 0;
+  patienceCard.classList.add('show');
+  patienceTimer.textContent = '00:00';
+  patienceBar.style.width = '12%';
+  patienceStep.textContent = 'Connecting to official RGUHS server…';
+
+  timerInterval = setInterval(() => {
+    elapsedSeconds++;
+    const m = String(Math.floor(elapsedSeconds / 60)).padStart(2, '0');
+    const s = String(elapsedSeconds % 60).padStart(2, '0');
+    patienceTimer.textContent = `${m}:${s}`;
+
+    if (elapsedSeconds < 8) {
+      patienceBar.style.width = `${15 + elapsedSeconds * 2.2}%`;
+      patienceStep.textContent = 'Establishing secure session with university portal…';
+    } else if (elapsedSeconds < 22) {
+      patienceBar.style.width = `${35 + (elapsedSeconds - 8) * 1.6}%`;
+      patienceStep.textContent = 'Submitting registration number & verifying candidate…';
+    } else if (elapsedSeconds < 45) {
+      patienceBar.style.width = `${58 + (elapsedSeconds - 22) * 0.9}%`;
+      patienceStep.textContent = 'Fetching Phase-I MBBS marksheet from examination database…';
+    } else if (elapsedSeconds < 90) {
+      patienceBar.style.width = `${78 + (elapsedSeconds - 45) * 0.3}%`;
+      patienceStep.textContent = 'RGUHS database under heavy traffic — still waiting for portal, please hold on…';
+    } else {
+      patienceBar.style.width = '94%';
+      patienceStep.textContent = 'Still awaiting server response. Government servers take time, please do not reload…';
+    }
+  }, 1000);
+}
+
+function stopPatienceTracker() {
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+  patienceCard.classList.remove('show');
+}
+
+function showError(msg) {
+  messageBox.textContent = msg;
+  messageBox.className = 'alert alert-danger show';
+}
+
+function hideError() {
+  messageBox.className = 'alert alert-danger';
+  messageBox.textContent = '';
+}
+
+function safe(val) {
+  return (val == null || val === '') ? '—' : String(val);
+}
+
+function renderMarksheet(data) {
+  document.getElementById('lblStudentName').textContent = safe(data.student_name);
+  document.getElementById('lblRegisNo').textContent = safe(data.registration_number);
+  document.getElementById('lblMother').textContent = safe(data.mother_name);
+  document.getElementById('lblFather').textContent = safe(data.father_name);
+  if (data.examination) {
+    document.getElementById('lblSemester').textContent = data.examination;
+  }
+
+  document.getElementById('lblMaxMarks').textContent = safe(data.maximum_marks);
+  document.getElementById('lblSecMArks').textContent = safe(data.grand_total);
+  document.getElementById('lblMarksofword').textContent = safe(data.marks_in_words);
+  document.getElementById('lblcollegeName').textContent = safe(data.college);
+  document.getElementById('lblresultpublishdate').textContent = safe(data.published_date);
+
+  const resEl = document.getElementById('lblResult');
+  const overall = (data.overall_result || '').toUpperCase();
+  resEl.textContent = overall || '—';
+  resEl.style.color = overall.includes('FAIL') ? 'red' : (overall.includes('PASS') ? 'green' : '#333');
+
+  if (data.min_pass) {
+    document.getElementById('lblMin').textContent = data.min_pass;
+  }
+
+  const printDate = data.printed_date || ('Printed Date : ' + new Date().toLocaleDateString('en-GB') + ' ' + new Date().toLocaleTimeString('en-US'));
+  document.getElementById('lblprintdate').textContent = printDate;
+
+  // Render subject rows
+  const tbody = document.getElementById('marksBody');
+  tbody.replaceChildren();
+
+  (data.subjects || []).forEach(s => {
+    const tr = document.createElement('tr');
+    const resultVal = s['Result'] || '';
+    const isFail = resultVal.toUpperCase().includes('FAIL');
+    const isPass = resultVal.toUpperCase().includes('PASS');
+
+    const cells = [
+      s['Paper Code'] || '',
+      s['Paper Title'] || '',
+      s['TP1 Max'] || '',
+      s['Theory Paper1'] || '',
+      s['TP2 Max'] || '',
+      s['Theory Paper2'] || '',
+      s['PPR Max'] || '',
+      s['Pract'] || '',
+      s['Pr.Viva Max'] || '',
+      s['Pract Viva'] || '',
+      s['Total Max'] || '',
+      s['Total Obt'] || '',
+      s['TIA Max'] || '',
+      s['Theory IA'] || '',
+      s['PIA Max'] || '',
+      s['Pract IA'] || '',
+      resultVal
+    ];
+
+    cells.forEach((val, idx) => {
+      const td = document.createElement('td');
+      td.textContent = safe(val);
+      if (idx === 16) {
+        td.style.color = isFail ? 'red' : (isPass ? 'green' : 'inherit');
+        td.style.fontWeight = 'bold';
+      }
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+
+  resultPanel.style.display = 'block';
+  resultPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  hideError();
+  resultPanel.style.display = 'none';
+
+  submit.disabled = true;
+  btnSpinner.style.display = 'inline-block';
+  btnText.textContent = 'Please be patient — fetching…';
+  startPatienceTracker();
+
+  const regVal = document.getElementById('reg').value.trim().toUpperCase();
+
+  try {
+    const response = await fetch('/api/result', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      cache: 'no-store',
+      body: JSON.stringify({
+        registration_number: regVal,
+        consent: document.getElementById('consent').checked
+      })
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.detail || 'Could not retrieve result from portal.');
+    }
+
+    renderMarksheet(data);
+  } catch (err) {
+    showError(err.message || 'Unable to retrieve result. Please verify registration number or try later.');
+  } finally {
+    stopPatienceTracker();
+    submit.disabled = false;
+    btnSpinner.style.display = 'none';
+    btnText.textContent = 'View Result';
+  }
+});
+</script>
+</body>
+</html>
